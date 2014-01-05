@@ -54,8 +54,6 @@ exports.newCat = function(req, res){
   newKitty.save(function (err) {
     if (err) 
         console.log("Problem saving newKitty", err);
-    else 
-        console.log("database save! " + newCatName + " the cat");
   })
 
   //rendering stuff (see newCat.jade)
@@ -76,7 +74,6 @@ exports.catList = function(req, res){
         console.log(err);
     }
     else {
-        console.log(cats);
         //rendering stuff (see catList.jade) 
         //make sure you specify the key-value pair... grr
         res.render('catList', {cats:cats});
@@ -90,7 +87,7 @@ exports.specificColorList = function(req, res){
 
   //find those colored cats in the database
   var query = Cat.find({ color: desiredColor });
-  query.sort({age: 'asc'})
+  query.sort({age: 'asc'});
   query.exec(function (err, cats) {
     if (err) {
         console.log(err);
@@ -102,3 +99,29 @@ exports.specificColorList = function(req, res){
   });
 }
 
+
+// GET /cats/delete/old - deletes the oldest cat (no longer appears on the lists)
+exports.deleteOldCat = function(req, res){  
+  //cats in the database
+  var query = Cat.find();
+  query.sort({age: 'desc'});
+  query.exec(function (err, cats) {
+    if (err) {
+        console.log(err);
+    }
+    else {
+        var deadCat = cats[0];
+        Cat.remove({name:deadCat.name}, function (err) {
+            if (err) {
+                console.log(err);
+            }
+        });
+
+        //rendering stuff (see deleteOldCat.jade) 
+        res.render('deleteOldCat', {deadCat:deadCat});
+    }
+  });
+}
+
+// tells you how to remove things from the database
+// http://mongoosejs.com/docs/api.html#model_Model.remove
