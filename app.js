@@ -73,4 +73,4 @@ http.createServer(app).listen(app.get('port'), function(){
 app.get('/cats/new', cats.newCat);
 app.get('/cats', cats.catList);
 app.get('/cats/color/:color', cats.specificColorList);
-app.get('/cats/delete/old', cats.deleteOldCat);
+//app.get('/cats/delete/old', cats.deleteOldCat);

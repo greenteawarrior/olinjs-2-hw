@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  h1 List of cats with #{desiredColor} fur
+    ul
+      each cat in cats
+          li #{cat.name} is #{cat.age} years old.

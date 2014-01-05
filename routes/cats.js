@@ -9,13 +9,13 @@ var catSchema = mongoose.Schema({
 var Cat = mongoose.model('Cat', catSchema);
 
 
+//Maybe the math things should be in another file... #reflectingonrepodesigndecisions
+
 //random math things 
 //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 var getRandomInt = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
-//random cat generator things
 
 //randomly creates a 10-letter name for the cat and returns the name string
 var generateCatName = function() {
@@ -58,8 +58,8 @@ exports.newCat = function(req, res){
         console.log("database save! " + newCatName + " the cat");
   })
 
-  //user sees this on the webpage
-  res.send("this new cat is " + newCatColor + " and " + newCatAge + " years old and its name is " + newCatName);
+  //rendering stuff (see newCat.jade)
+  res.render('newCat', {newCatColor: newCatColor, newCatAge: newCatAge, newCatName: newCatName});
 }
 
 
@@ -68,31 +68,25 @@ exports.newCat = function(req, res){
 
 // GET /cats - shows a sorted list of cats by age. displays names, colors, ages
 exports.catList = function(req, res){
-  res.send('meow cat list');
-  
   //cats in the database
   var query = Cat.find();
-  query.sort({age: 'asc'})
+  query.sort({age: 'asc'});
   query.exec(function (err, cats) {
     if (err) {
         console.log(err);
     }
     else {
-        for (var c in cats) {
-            console.log(cats[c].age);
-        }
+        console.log(cats);
+        //rendering stuff (see catList.jade) 
+        //make sure you specify the key-value pair... grr
+        res.render('catList', {cats:cats});
     }
   });
-
-  //soon to be render stuff here
-
 }
-
 
 // GET /cats/color/:color - shows a sorted list of cats by age that have that specific color
 exports.specificColorList = function(req, res){
   var desiredColor = req.params.color;
-  console.log(req.params.color)
 
   //find those colored cats in the database
   var query = Cat.find({ color: desiredColor });
@@ -102,31 +96,9 @@ exports.specificColorList = function(req, res){
         console.log(err);
     }
     else {
-        for (var c in cats) {
-            console.log(cats[c].age);
-        }
+        //rendering stuff (see specificColorList.jade)
+        res.render('specificColorList', {desiredColor: desiredColor, cats:cats});
     }
   });
-
-  //soon to be render stuff
-  res.send('hello cats of this color');
 }
 
-
-// GET /cats/delete/old - deletes the oldest cat (no longer appears on the lists)
-exports.deleteOldCat = function(req, res){
-  var query = Cat.find();
-  query.sort({age: 'desc'})
-  query.exec(function (err, cats) {
-    if (err) {
-        console.log(err);
-    }
-    else {
-        console.log(cats[0]);
-    }
-  });
-
-
-  //soon to be render stuff
-  res.send('farewell old cat');
-}
