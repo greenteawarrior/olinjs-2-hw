@@ -1,7 +1,18 @@
+//model definitions in the /models folder
 var Cat = require('../models/catModel');
 
+//helpful resources :D
+  //about random things
+  //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+  
+  //useful query info
+  //http://mongoosejs.com/docs/queries.html
+
+  // tells you how to remove things from the database
+  // http://mongoosejs.com/docs/api.html#model_Model.remove
+
+
 //random generation helper functions for the cats
-//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 var getRandomInt = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
@@ -37,12 +48,12 @@ exports.newCat = function(req, res){
   var newCatAge =  generateCatAge();
   var newCatName = generateCatName();
 
-  //mongoose stuff
+  //mongoose stuff for a new cat
   var newKitty = new Cat({name: newCatName, age: newCatAge, color: newCatColor}) 
   
   newKitty.save(function (err) {
     if (err) 
-        console.log("Problem saving newKitty", err);
+      console.log("Problem saving newKitty", err);
   })
 
   //rendering stuff (see newCat.jade)
@@ -50,15 +61,10 @@ exports.newCat = function(req, res){
 }
 
 
-//useful query info
-//http://mongoosejs.com/docs/queries.html
-
 // GET /cats - shows a sorted list of cats by age. displays names, colors, ages
 exports.catList = function(req, res){
-  //cats in the database
-  var query = Cat.find();
-  query.sort({age: 'asc'});
-  query.exec(function (err, cats) {
+  //getting ALL the cats in the database, sorted by ascending age
+  Cat.find().sort({age: 'asc'}).exec(function (err, cats) {
     if (err) {
         console.log(err);
     }
@@ -70,14 +76,13 @@ exports.catList = function(req, res){
   });
 }
 
+
 // GET /cats/color/:color - shows a sorted list of cats by age that have that specific color
 exports.specificColorList = function(req, res){
   var desiredColor = req.params.color;
 
-  //find those colored cats in the database
-  var query = Cat.find({ color: desiredColor });
-  query.sort({age: 'asc'});
-  query.exec(function (err, cats) {
+  //find those cats of desired color in the database
+  Cat.find({color: desiredColor}).sort({age: 'asc'}).exec(function (err, cats) {
     if (err) {
         console.log(err);
     }
@@ -91,10 +96,8 @@ exports.specificColorList = function(req, res){
 
 // GET /cats/delete/old - deletes the oldest cat (no longer appears on the lists)
 exports.deleteOldCat = function(req, res){  
-  //cats in the database
-  var query = Cat.find();
-  query.sort({age: 'desc'});
-  query.exec(function (err, cats) {
+  //removing the oldest cat from the database
+  Cat.find().sort({age: 'desc'}).exec(function (err, cats) {
     if (err) {
         console.log(err);
     }
@@ -111,6 +114,3 @@ exports.deleteOldCat = function(req, res){
     }
   });
 }
-
-// tells you how to remove things from the database
-// http://mongoosejs.com/docs/api.html#model_Model.remove
