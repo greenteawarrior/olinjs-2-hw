@@ -1,17 +1,6 @@
-//mongoose stuff. databases!
-//perhaps this should be in a models subfolder??
-var mongoose = require('mongoose');
-var catSchema = mongoose.Schema({
-    name: String,
-    age: Number,
-    color: String
-})
-var Cat = mongoose.model('Cat', catSchema);
+var Cat = require('../models/catModel');
 
-
-//Maybe the math things should be in another file... #reflectingonrepodesigndecisions
-
-//random math things 
+//random generation helper functions for the cats
 //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 var getRandomInt = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
