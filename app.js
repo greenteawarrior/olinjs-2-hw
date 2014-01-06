@@ -26,6 +26,7 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 //mongoose!!
 //refer to https://devcenter.heroku.com/articles/nodejs-mongoose
 
@@ -57,7 +58,7 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-//cats!
+//cat pages! see routes/cats.js
 app.get('/cats/new', cats.newCat);
 app.get('/cats', cats.catList);
 app.get('/cats/color/:color', cats.specificColorList);
