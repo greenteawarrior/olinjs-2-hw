@@ -1,5 +1,9 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h1= title 
+  ul#catpages
+  li: a(href="/cats/new") (creates a new cat)
+  li: a(href="/cats") (a list of ALL the cats! sorted by age) 
+  li: a(href="/cats/color/red") (shows a list of all the red cats. specify the color by changing the color parameter in the URL :P)
+  li: a(href="/cats/delete/old") (deletes the oldest cat)
